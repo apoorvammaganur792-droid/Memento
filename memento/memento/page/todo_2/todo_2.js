@@ -207,7 +207,7 @@ class MementoTodos {
         try {
 
             const response = await frappe.call({
-                method: "memento.memento.page.memento_todos.memento_todos.get_my_todos"
+                method: "memento.memento.page.todo_2.todo_2.get_my_todos"
             });
 
             this.todos = response.message || [];
@@ -254,7 +254,7 @@ class MementoTodos {
         try {
 
             await frappe.call({
-                method: "memento.memento.page.memento_todos.memento_todos.create_todo",
+                method: "memento.memento.page.todo_2.todo_2.create_todo",
                 args: {
                     description: description
                 }

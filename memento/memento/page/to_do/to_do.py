@@ -34,7 +34,7 @@ def _row(c):
 
 def _load(name):
 	c = frappe.db.get_value(
-		"Comment",
+		"ToDo Table",
 		name,
 		["name", "owner", "comment_type", "reference_doctype", "reference_name"],
 		as_dict=True,
@@ -62,8 +62,8 @@ def get_todos(reference_doctype, reference_name):
 
 
 @frappe.whitelist()
-def add_todo(reference_doctype, reference_name, text):
-	_check(reference_doctype, reference_name)
+def add_todo(doctype, task_id, todo):
+	# _check(reference_doctype, reference_name)
 	text = (text or "").strip()
 	if not text:
 		frappe.throw(_("Todo cannot be empty"))
@@ -71,16 +71,12 @@ def add_todo(reference_doctype, reference_name, text):
 	body = html.escape(text).replace("\n", "<br>")
 	doc = frappe.get_doc(
 		{
-			"doctype": "Comment",
-			"comment_type": "Comment",
-			"reference_doctype": reference_doctype,
-			"reference_name": reference_name,
-			"comment_email": frappe.session.user,
-			"comment_by": get_fullname(frappe.session.user),
-			# same wrapper the standard comment box uses, so it also
-			# renders correctly in the form's Activity timeline
-			"content": f'<div class="ql-editor read-mode"><p>{body}</p></div>',
-			"todo_done": 0,
+			"doctype": "Todo Table",
+			"todo":todo,
+			"parent": task_id,
+			"parenttype": doctype,
+			"user": frappe.session.user,
+			"status": 0
 		}
 	)
 	doc.insert(ignore_permissions=True)
@@ -92,7 +88,7 @@ def set_done(name, done):
 	_load(name)
 	done = cint(done)
 	on = now_datetime() if done else None
-	frappe.db.set_value("Comment", name, {"todo_done": done, "todo_done_on": on})
+	frappe.db.set_value("Todo Table", name, {"status": done, "todo_done_on": on})
 	return {"todo_done": done, "todo_done_on": on}
 
 

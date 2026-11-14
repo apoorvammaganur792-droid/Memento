@@ -7,32 +7,11 @@ from frappe.model.document import Document
 @frappe.whitelist()
 def get_my_todos(limit=500):
     """Fetch only the current user's personal tasks."""
-
     user = frappe.session.user
-
     if user == "Guest":
         frappe.throw(_("Please log in first."))
-
     limit = min(max(int(limit), 1), 500)
-
-    todos = frappe.get_list(
-        "ToDo",
-        filters={
-            "allocated_to": user
-        },
-        fields=[
-            "name",
-            "description",
-            "status",
-            "priority",
-            "creation",
-            "modified",
-            "date"
-        ],
-        order_by="creation asc",
-        page_length=limit
-    )
-
+    todos = frappe.get_list("Daily ToDo",filters={"allocated_to": user},fields=["name", "description","status","priority","creation","modified","date"],order_by="creation asc",page_length=limit)
     return todos
 
 
@@ -54,7 +33,7 @@ def create_todo(description):
         frappe.throw(_("Task description cannot exceed 5000 characters."))
 
     todo = frappe.get_doc({
-        "doctype": "Daily Todo",
+        "doctype": "Daily ToDo",
         "description": description,
         "allocated_to": user,
         "status": "Open",
@@ -83,7 +62,7 @@ def update_todo_status(name, status):
     if status not in allowed_statuses:
         frappe.throw(_("Invalid task status."))
 
-    todo = frappe.get_doc("ToDo", name)
+    todo = frappe.get_doc("Daily ToDo", name)
 
     # Prevent modifying another user's task.
     if todo.allocated_to != user:
@@ -103,3 +82,8 @@ def update_todo_status(name, status):
         "status": todo.status,
         "message": _("Task updated successfully.")
     }
+
+
+
+
+# Sagar is getting more ideas about memento application and it really need classic todo where he can eassiely fall and make new todos for future use what do you say huh             
