@@ -345,6 +345,8 @@ class TodoComments {
 		});
 		this.items = [];
 		this.filter = "All";
+        this.task_id = "TSK-24-10-2026-30"
+        this.doctype ="Tasks"
 		this.make();
 	}
 
@@ -407,6 +409,9 @@ class TodoComments {
 			? { dt: "User", dn: frappe.session.user }
 			: { dt: route[1], dn: route[2] };
 		this.page.set_title(mine ? __("My Todos") : `${__("Todos")}: ${this.ref.dn}`);
+        this.task_id = "TSK-24-10-2026-30"
+        this.doctype ="Tasks" 
+
 	}
 
 	refresh() {
@@ -420,10 +425,9 @@ class TodoComments {
 	}
 
 	load() {
-		return frappe
-			.call({
+		return frappe.call({
 				method: `${TODO_API}.get_todos`,
-				args: { reference_doctype: this.ref.dt, reference_name: this.ref.dn },
+				args: { task_id: this.task_id, doctype: this.doctype },
 			})
 			.then((r) => {
 				this.items = r.message || [];
@@ -483,9 +487,9 @@ class TodoComments {
 			.call({
 				method: `${TODO_API}.add_todo`,
 				args: {
-					reference_doctype: this.ref.dt,
-					reference_name: this.ref.dn,
-					text,
+					task_id: this.task_id,
+					doctype: this.doctype,
+					todo:   text,
 				},
 			})
 			.then((r) => {

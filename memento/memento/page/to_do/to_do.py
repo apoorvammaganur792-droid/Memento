@@ -46,33 +46,47 @@ def _load(name):
 
 
 @frappe.whitelist()
-def get_todos(reference_doctype, reference_name):
-	_check(reference_doctype, reference_name)
+def get_todos(task_id, doctype):
+	# _check(reference_doctype, reference_name)
 	rows = frappe.get_all(
-		"Comment",
+		"ToDo Table",
 		filters={
-			"comment_type": "Comment",
-			"reference_doctype": reference_doctype,
-			"reference_name": reference_name,
+			"parent": task_id,
+			"parenttype": doctype,
 		},
-		fields=["name", "content", "owner", "creation", "todo_done", "todo_done_on"],
+		fields=["name", "todo", "user", "start_on","end_on","status","total_duration","creation"],
 		order_by="creation asc",
 	)
 	return [_row(r) for r in rows]
+
+# @frappe.whitelist()
+# def get_todos(reference_doctype, reference_name):
+# 	_check(reference_doctype, reference_name)
+# 	rows = frappe.get_all(
+# 		"Comment",
+# 		filters={
+# 			"comment_type": "Comment",
+# 			"reference_doctype": reference_doctype,
+# 			"reference_name": reference_name,
+# 		},
+# 		fields=["name", "content", "owner", "creation", "todo_done", "todo_done_on"],
+# 		order_by="creation asc",
+# 	)
+# 	return [_row(r) for r in rows]
 
 
 @frappe.whitelist()
 def add_todo(doctype, task_id, todo):
 	# _check(reference_doctype, reference_name)
-	text = (text or "").strip()
+	text = (todo or "").strip()
 	if not text:
 		frappe.throw(_("Todo cannot be empty"))
 
 	body = html.escape(text).replace("\n", "<br>")
 	doc = frappe.get_doc(
 		{
-			"doctype": "Todo Table",
-			"todo":todo,
+			"doctype": "ToDo Table",
+			"todo":text,
 			"parent": task_id,
 			"parenttype": doctype,
 			"user": frappe.session.user,
@@ -88,7 +102,7 @@ def set_done(name, done):
 	_load(name)
 	done = cint(done)
 	on = now_datetime() if done else None
-	frappe.db.set_value("Todo Table", name, {"status": done, "todo_done_on": on})
+	frappe.db.set_value("ToDo Table", name, {"status": done, "end_on": on})
 	return {"todo_done": done, "todo_done_on": on}
 
 
