@@ -8,8 +8,8 @@ from frappe.utils import cint, get_fullname, now_datetime
 
 def _check(doctype, name):
 	# default anchor is the user's own User record, always allowed
-	if doctype == "User" and name == frappe.session.user:
-		return
+	# if doctype == "User" and name == frappe.session.user:
+	# 	return
 	frappe.has_permission(doctype, "read", doc=name, throw=True)
 
 
@@ -23,7 +23,7 @@ def _plain(content):
 def _row(c):
 	return {
 		"name": c.name,
-		"text": _plain(c.content),
+		"text": _plain(c.todo),
 		"owner": c.owner,
 		"full_name": get_fullname(c.owner),
 		"creation": c.creation,
@@ -36,18 +36,18 @@ def _load(name):
 	c = frappe.db.get_value(
 		"ToDo Table",
 		name,
-		["name", "owner", "comment_type", "reference_doctype", "reference_name"],
+		["name", "user", "parent", "parenttype"],
 		as_dict=True,
 	)
-	if not c or c.comment_type != "Comment":
+	if not c:
 		frappe.throw(_("Todo not found"), frappe.DoesNotExistError)
-	_check(c.reference_doctype, c.reference_name)
+	_check(c.parent, c.parenttype)
 	return c
 
 
 @frappe.whitelist()
 def get_todos(task_id, doctype):
-	# _check(reference_doctype, reference_name)
+	_check(doctype, task_id)
 	rows = frappe.get_all(
 		"ToDo Table",
 		filters={
@@ -111,4 +111,4 @@ def delete_todo(name):
 	c = _load(name)
 	if c.owner != frappe.session.user and "System Manager" not in frappe.get_roles():
 		frappe.throw(_("You can only delete your own todos"), frappe.PermissionError)
-	frappe.delete_doc("Comment", name, ignore_permissions=True, force=True)
+	frappe.delete_doc("ToDo Table", name, ignore_permissions=True, force=True)

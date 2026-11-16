@@ -7,7 +7,6 @@ frappe.pages['todo-2'].on_page_load = function(wrapper) {
 }
 
 
-
 frappe.pages["todo-2"].on_page_load = function (wrapper) {
     new MementoTodos(wrapper);
 };
@@ -16,9 +15,7 @@ frappe.pages["todo-2"].on_page_load = function (wrapper) {
 class MementoTodos {
 
     constructor(wrapper) {
-
         this.wrapper = $(wrapper);
-
         this.page = frappe.ui.make_app_page({
             parent: wrapper,
             title: __("ToDo's"),

@@ -409,8 +409,8 @@ class TodoComments {
 			? { dt: "User", dn: frappe.session.user }
 			: { dt: route[1], dn: route[2] };
 		this.page.set_title(mine ? __("My Todos") : `${__("Todos")}: ${this.ref.dn}`);
-        this.task_id = "TSK-24-10-2026-30"
-        this.doctype ="Tasks" 
+        // this.task_id = "TSK-24-10-2026-30"
+        // this.doctype ="Tasks" 
 
 	}
 
@@ -487,9 +487,9 @@ class TodoComments {
 			.call({
 				method: `${TODO_API}.add_todo`,
 				args: {
+                    doctype: this.doctype,
 					task_id: this.task_id,
-					doctype: this.doctype,
-					todo:   text,
+					todo:   text
 				},
 			})
 			.then((r) => {

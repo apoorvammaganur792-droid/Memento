@@ -129,13 +129,14 @@
 }
 
 .todo-timeline {
+    display: flex;
     max-height: 520px;
     overflow-y: auto;
-    padding: 5px 8px 15px 5px;
-    display: flex;
     flex-direction: column;
-    gap: 0;
-    scroll-behavior: smooth;
+    gap: 12px;
+    padding: 8px 5px 18px;
+    max-height: 520px;
+    overflow-y: auto;
 }
 
 
@@ -146,21 +147,48 @@
     display: flex;
     align-items: flex-start;
     gap: 15px;
-    padding: 17px 15px;
-    border: 1px solid var(--todo-border);
-    /* border-bottom: 1px solid var(--todo-border); */
-    transition: background 0.2s ease;
+
+    padding: 18px 20px;
+    margin: 0;
+
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
+
+/* .todo-item:hover {
+    background: var(--control-bg);
+} */
 
 .todo-item:hover {
-    background: var(--control-bg);
+    border-color: var(--text-muted);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
 }
+
+
+/* .todo-item-check {
+    padding-top: 3px;
+} */
+
+/* Checkbox alignment */
 
 .todo-item-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding-top: 3px;
+    flex-shrink: 0;
 }
 
-.todo-checkbox {
+
+/* .todo-checkbox {
     appearance: none;
     -webkit-appearance: none;
     width: 19px;
@@ -171,7 +199,7 @@
     position: relative;
     transition: 0.2s;
     margin: 0;
-}
+} */
 
 .todo-checkbox:checked {
     background: var(--text-color);
@@ -198,22 +226,33 @@
     min-width: 0;
 }
 
+/* .todo-description {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-color);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+} */
+
+/* Description */
 .todo-description {
     font-size: 14px;
+    font-weight: 500;
     line-height: 1.7;
     color: var(--text-color);
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
+/* Metadata */
 .todo-item-meta {
     display: flex;
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
-    margin-top: 7px;
-    color: var(--todo-muted);
+    margin-top: 9px;
     font-size: 11px;
+    color: var(--text-muted);
 }
 
 .todo-item-meta i {
