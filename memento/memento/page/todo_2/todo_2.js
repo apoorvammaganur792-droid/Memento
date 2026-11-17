@@ -118,7 +118,7 @@ class MementoTodos {
                     <div class="composer-content">
 
                         <textarea
-                            id="todo-input"
+                            id="todo-input1"
                             placeholder="Write something you want to accomplish..."
                             rows="2">
                         </textarea>

@@ -529,8 +529,7 @@ class Projects {
                                 type="text"
                                 id="authorName"
                                 name="authorName"
-                                required
-                            >
+                                required>
 
                         </div>
 
