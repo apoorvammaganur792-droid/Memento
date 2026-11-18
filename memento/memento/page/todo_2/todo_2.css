@@ -355,7 +355,7 @@
     min-width: 0;
 }
 
-#todo-input1{
+#todo-input{
     width: 100%;
     resize: vertical;
     min-height: 55px;
@@ -370,12 +370,12 @@
 }
 
 
-#todo-input1:focus {
+#todo-input:focus {
     outline: none;
     box-shadow: none;
 }
 
-#todo-input1::placeholder {
+#todo-input::placeholder {
     color: var(--todo-muted);
 }
 

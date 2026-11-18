@@ -37,7 +37,6 @@ class MementoTodos {
             <div class="memento-todos">
 
                 <div class="todo-header">
-
                     <div>
                         <h2>My Tasks</h2>
                         <p>Small steps. Consistent progress.</p>
@@ -46,12 +45,10 @@ class MementoTodos {
                     <div class="todo-header-icon">
                         <i class="fa fa-check-square-o"></i>
                     </div>
-
                 </div>
 
 
                 <div class="todo-stats">
-
                     <div class="todo-stat">
                         <span class="stat-value" id="total-tasks">0</span>
                         <span class="stat-label">All Tasks</span>
@@ -66,80 +63,54 @@ class MementoTodos {
                         <span class="stat-value" id="completed-tasks">0</span>
                         <span class="stat-label">Completed</span>
                     </div>
-
                 </div>
 
 
                 <div class="todo-toolbar">
-
                     <div class="todo-filters">
-
                         <button class="todo-filter active"
                             data-filter="All">
                             All
                         </button>
-
                         <button class="todo-filter"
                             data-filter="Open">
                             Pending
                         </button>
-
                         <button class="todo-filter"
                             data-filter="Closed">
                             Completed
                         </button>
-
                     </div>
-
                     <button class="todo-refresh">
                         <i class="fa fa-refresh"></i>
                     </button>
-
                 </div>
 
 
                 <div class="todo-timeline-wrapper">
-
                     <div class="todo-timeline" id="todo-timeline">
-
                         <div class="todo-loading">
                             Loading your tasks...
                         </div>
-
                     </div>
-
                 </div>
 
 
                 <div class="todo-composer">
-
                     <div class="composer-indicator"></div>
-
                     <div class="composer-content">
-
-                        <textarea
-                            id="todo-input1"
-                            placeholder="Write something you want to accomplish..."
-                            rows="2">
-                        </textarea>
-
+                        <textarea id="todo-input"placeholder="Write something you want to accomplish..." rows="2"></textarea>
                         <div class="composer-footer">
-
                             <span class="composer-hint">
                                 Press Ctrl + Enter to add
                             </span>
-
                             <button class="add-todo-btn">
                                 <span>Add Task</span>
                                 <i class="fa fa-arrow-up"></i>
                             </button>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
         `);
     }
