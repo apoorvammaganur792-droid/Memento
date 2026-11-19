@@ -137,6 +137,15 @@
     padding: 8px 5px 18px;
     max-height: 520px;
     overflow-y: auto;
+
+     /* Smooth scrolling */
+    scroll-behavior: smooth;
+
+    /* Firefox */
+    scrollbar-width: none;
+
+    /* IE and Edge legacy */
+    -ms-overflow-style: none;
 }
 
 

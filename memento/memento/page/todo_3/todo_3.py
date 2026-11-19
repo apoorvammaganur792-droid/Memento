@@ -82,8 +82,3 @@ def update_todo_status(name, status):
         "status": todo.status,
         "message": _("Task updated successfully.")
     }
-
-
-
-
-# Sagar is getting more ideas about memento application and it really need classic todo where he can eassiely fall and make new todos for future use what do you say huh             

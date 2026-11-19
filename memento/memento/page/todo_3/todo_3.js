@@ -44,7 +44,6 @@ class MementoTodos {
         this.page.main.html(`<div class="todo-layout">
             <!-- Main content -->
             <div class="todo-main-column">
-
                 <div class="todo-timeline-wrapper">
 
                     <div class="todo-timeline" id="todo-timeline">
@@ -57,17 +56,9 @@ class MementoTodos {
 
                 <!-- Keep existing composer here -->
                 <div class="todo-composer">
-
                     <div class="composer-indicator"></div>
-
                     <div class="composer-content">
-
-                        <textarea
-                            id="todo-input"
-                            placeholder="Write something you want to accomplish..."
-                            rows="2">
-                        </textarea>
-
+                        <textarea id="todo-input" placeholder="Write something you want to accomplish..." rows="2"></textarea>
                         <div class="composer-footer">
 
                             <span class="composer-hint">
@@ -80,11 +71,8 @@ class MementoTodos {
                             </button>
 
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
 
@@ -99,7 +87,7 @@ class MementoTodos {
 
                         <div class="todo-stat">
                             <span class="stat-value" id="total-tasks">0</span>
-                            <span class="stat-label">All Tasks</span>
+                            <span class="stat-label">All Todo</span>
                         </div>
 
                         <div class="todo-stat">
@@ -110,6 +98,11 @@ class MementoTodos {
                         <div class="todo-stat">
                             <span class="stat-value" id="completed-tasks">0</span>
                             <span class="stat-label">Completed</span>
+                        </div>
+
+                        <div class="todo-stat">
+                            <span class="stat-value" id="today-tasks">0</span>
+                            <span class="stat-label">Today</span>
                         </div>
 
                     </div>
@@ -451,6 +444,83 @@ class MementoTodos {
         this.scroll_to_bottom();
 
     }
+
+    // render_todos() {
+
+    //     const html = filtered.map(todo => {
+
+    //     const completed = todo.status === "Closed";
+
+    //     const description = frappe.utils.escape_html(
+    //         todo.description || ""
+    //     );
+
+    //     const created = todo.creation
+    //         ? frappe.datetime.str_to_user(todo.creation)
+    //         : "";
+
+    //     return `<div class="todo-item ${completed ? "completed" : ""}"
+    //                 data-name="${frappe.utils.escape_html(todo.name)}">
+
+    //                 <div class="todo-item-check">
+
+    //                     <input
+    //                         type="checkbox"
+    //                         class="todo-checkbox"
+    //                         data-name="${frappe.utils.escape_html(todo.name)}"
+    //                         ${completed ? "checked" : ""}
+    //                     >
+
+    //                 </div>
+
+    //                 <div class="todo-item-content">
+
+    //                     <div class="todo-description-view">
+
+    //                         <div class="todo-description">
+    //                             ${description}
+    //                         </div>
+
+    //                         <div class="todo-item-meta">
+
+    //                             <span>
+    //                                 <i class="fa fa-clock-o"></i>
+    //                                 ${frappe.utils.escape_html(created)}
+    //                             </span>
+
+    //                             <span class="todo-status-label">
+    //                                 ${completed ? "Completed" : "Pending"}
+    //                             </span>
+
+    //                         </div>
+
+    //                         <div class="todo-item-actions">
+
+    //                             <button class="todo-edit-btn"
+    //                                 data-name="${frappe.utils.escape_html(todo.name)}">
+    //                                 <i class="fa fa-pencil"></i>
+    //                                 Edit
+    //                             </button>
+
+    //                             <button class="todo-delete-btn"
+    //                                 data-name="${frappe.utils.escape_html(todo.name)}">
+    //                                 <i class="fa fa-trash-o"></i>
+    //                                 Delete
+    //                             </button>
+
+    //                         </div>
+
+    //                     </div>
+
+    //                 </div>
+
+    //             </div>
+    //         `;
+
+    //     }).join("");
+
+    // }   
+
 
 
     scroll_to_bottom() {
