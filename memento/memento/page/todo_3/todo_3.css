@@ -1,9 +1,4 @@
 
-
-/* Main container */
-
-
-
 /* Main two-column layout */
 
 .todo-layout {
@@ -22,43 +17,8 @@
 }
 
 
-/* Header */
-
-/* .todo-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 25px;
-} */
-
-/* .todo-header h2 {
-    font-size: 26px;
-    font-weight: 700;
-    margin: 0 0 5px;
-    color: var(--heading-color);
-} */
-
-/* .todo-header p {
-    color: var(--todo-muted);
-    margin: 0;
-    font-size: 13px;
-} */
-
-/* .todo-header-icon {
-    width: 48px;
-    height: 48px;
-    border: 1px solid var(--todo-border);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-} */
-
 
 /* Statistics */
-
-
 
 .todo-stat {
     text-align: center;
@@ -68,18 +28,7 @@
     padding: 15px;
     display: flex;
     flex-direction: column;
-}   
-
-/* .todo-stat {
-    background: var(--todo-bg);
-    border: 1px solid var(--todo-border);
-    border-radius: 12px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-} */
+}
 
 .stat-value {
     font-size: 25px;
@@ -161,14 +110,14 @@
 }
 
 /* Chrome, Brave, Safari */
-.todo-timeline::-webkit-scrollbar {
+/* .todo-timeline::-webkit-scrollbar {
     display: none;
     width: 0;
     height: 0;
-}
+} */
 
 
-/* Individual task */
+/* Individual todo */
 
 .todo-item {
     position: relative;
@@ -189,23 +138,17 @@
         transform 0.2s ease,
         box-shadow 0.2s ease;
 }
-
-/* .todo-item:hover {
-    background: var(--control-bg);
-} */
-
-/* .todo-item:hover {
-    border-color: var(--text-muted);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
-} */
-
 .todo-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 
+/* 
+.todo-item:hover {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+} */
 /* .todo-item-check {
     padding-top: 3px;
 } */
@@ -354,10 +297,122 @@
     font-size: 13px;
 }
 
+/* Todo action buttons */
+
+.todo-item-actions {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    /* opacity: 0;
+    transition: opacity 0.2s ease; */
+
+}
+
+.todo-item:hover .todo-item-actions {
+    /* opacity: 1; */
+    display: flex;
+    animation: todo-actions-appear 0.25s ease 0.35s both;
+   
+    
+}
+
+@keyframes todo-actions-appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+
+.todo-item-actions button,
+.todo-editor-actions button {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 11px;
+    padding: 3px 0;
+    cursor: pointer;
+}
+
+.todo-item-actions button:hover {
+    color: var(--text-color);
+}
+
+.todo-item-actions .todo-delete-btn:hover {
+    color: var(--red-500);
+    border: 1px solid var(--todo-border);
+    border-radius: 10px;
+    padding: 7px 7px;
+    margin: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Inline editor */
+
+.todo-inline-editor {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.todo-editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+}
+
+.todo-editor-actions .todo-save-btn {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.todo-editor-actions .todo-dismiss-btn {
+    color: var(--text-muted);
+}
+
+.todo-editor-actions button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+.todo-edit-textarea {
+    width: 100%;
+    min-height: 85px;
+    resize: vertical;
+
+    padding: 12px 14px;
+
+    background: var(--control-bg);
+    color: var(--text-color);
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+
+    outline: none;
+    box-shadow: none;
+}
+
+.todo-edit-textarea:focus {
+    border-color: var(--text-muted);
+    outline: none;
+    box-shadow: none;
+}
+
+
 
 /* Composer */
 
-.todo-composer {
+/* .todo-composer {
     position: sticky;
     bottom: 10px;
     display: flex;
@@ -368,7 +423,29 @@
     border: 1px solid var(--todo-border);
     border-radius: 15px;
     box-shadow: var(--card-shadow);
+    z-index: 5; */
+
+    /* added */
+    /* flex-shrink: 0;
+    transform: none;
+} */
+
+.todo-composer {
+    position: relative;
+    bottom: auto;
+
+    display: flex;
+    gap: 12px;
+    padding: 15px;
+    margin-top: 15px;
+
+    background: var(--card-bg);
+    border: 1px solid var(--todo-border);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+
     z-index: 5;
+    flex-shrink: 0;
 }
 
 .composer-indicator {
@@ -444,60 +521,11 @@
 }
 
 
-/* Responsive */
-
-@media (max-width: 600px) {
-
-    .memento-todos {
-        padding: 0 10px 15px;
-        margin-top: 15px;
-    }
-
-    .todo-header h2 {
-        font-size: 22px;
-    }
-
-    .todo-stats {
-        gap: 7px;
-    }
-
-    .todo-stat {
-        padding: 11px;
-    }
-
-    .stat-value {
-        font-size: 21px;
-    }
-
-    .stat-label {
-        font-size: 10px;
-    }
-
-    .todo-composer {
-        padding: 11px;
-    }
-
-    .composer-hint {
-        display: none;
-    }
-
-    .todo-timeline {
-        max-height: 55vh;
-    }
-}
 
 
 
 
 
-/* Main timeline column */
-
-.todo-main-column {
-    width: 100%;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-}
 
 /* Right sidebar */
 
@@ -585,5 +613,65 @@
     font-size: 12px;
 }
 
+
+
+
 /* Responsive */
+
+@media (max-width: 600px) {
+
+    .todo-item-actions {
+        display: flex;
+    }
+
+    .memento-todos {
+        padding: 0 10px 15px;
+        margin-top: 15px;
+    }
+
+    .todo-header h2 {
+        font-size: 22px;
+    }
+
+    .todo-stats {
+        gap: 7px;
+    }
+
+    .todo-stat {
+        padding: 11px;
+    }
+
+    .stat-value {
+        font-size: 21px;
+    }
+
+    .stat-label {
+        font-size: 10px;
+    }
+
+    .todo-composer {
+        padding: 11px;
+    }
+
+    .composer-hint {
+        display: none;
+    }
+
+    .todo-timeline {
+        max-height: 55vh;
+    }
+}
+
+
+
+
+
+/* Main timeline column */
+
+.todo-main-column {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
 

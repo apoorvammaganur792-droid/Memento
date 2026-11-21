@@ -6,12 +6,12 @@
 // 	});
 // }
 
-frappe.pages['todo-3'].on_page_load = function(wrapper) {
-	var page = frappe.ui.make_app_page({
-		parent: wrapper,
-		title: 'None',
-		single_column: true
-	});
+frappe.pages['todo-3'].on_page_load = function (wrapper) {
+    var page = frappe.ui.make_app_page({
+        parent: wrapper,
+        title: 'None',
+        single_column: true
+    });
 }
 
 
@@ -40,7 +40,6 @@ class MementoTodos {
 
 
     make_layout() {
-
         this.page.main.html(`<div class="todo-layout">
             <!-- Main content -->
             <div class="todo-main-column">
@@ -51,7 +50,6 @@ class MementoTodos {
                             Loading your tasks...
                         </div>
                     </div>
-
                 </div>
 
                 <!-- Keep existing composer here -->
@@ -66,7 +64,7 @@ class MementoTodos {
                             </span>
 
                             <button class="add-todo-btn">
-                                <span>Add Task</span>
+                                <span>ToDo</span>
                                 <i class="fa fa-arrow-up"></i>
                             </button>
 
@@ -150,11 +148,9 @@ class MementoTodos {
     bind_events() {
 
         const main = this.page.main;
-
         main.on("click", ".add-todo-btn", () => {
             this.create_todo();
         });
-
 
         main.on("keydown", "#todo-input", (e) => {
 
@@ -190,15 +186,61 @@ class MementoTodos {
 
             const name = checkbox.data("name");
 
-            const status = checkbox.is(":checked")
-                ? "Closed"
-                : "Open";
+            const status = checkbox.is(":checked") ? 1 : 0;
 
             this.update_status(name, status, checkbox);
 
         });
 
+
+
+
+        // Start editing
+        main.on("click", ".todo-edit-btn", (e) => {
+            const name = $(e.currentTarget).data("name");
+            this.start_edit(name);
+        });
+
+
+        // Save edited task
+        main.on("click", ".todo-save-btn", (e) => {
+            console.log("Save button clicked");
+            // const name = $(e.currentTarget).data("name");
+            const name = $(e.currentTarget).closest(".todo-item").attr("data-name");
+
+            console.log("Saving task with name:", name);
+
+            this.save_edit(name);
+
+        });
+
+
+        // Dismiss editing
+        main.on("click", ".todo-dismiss-btn", (e) => {
+
+            // const name = $(e.currentTarget).data("name");
+            const name = $(e.currentTarget).closest(".todo-item").attr("data-name");
+
+            this.dismiss_edit(name);
+
+        });
+
+
+        // Delete task
+        main.on("click", ".todo-delete-btn", (e) => {
+
+            // const name = $(e.currentTarget).data("name");
+            const name = $(e.currentTarget).closest(".todo-item").attr("data-name");
+
+            this.delete_todo(name);
+
+        });
+
+
     }
+
+
+
 
 
     async load_todos() {
@@ -292,7 +334,7 @@ class MementoTodos {
         try {
 
             await frappe.call({
-                method: "memento.memento.page.memento_todos.memento_todos.update_todo_status",
+                method: "memento.memento.page.todo_3.todo_3.update_todo_status",
                 args: {
                     name: name,
                     status: status
@@ -302,7 +344,7 @@ class MementoTodos {
             await this.load_todos();
 
             frappe.show_alert({
-                message: status === "Closed"
+                message: status === "True"
                     ? __("Task completed!")
                     : __("Task reopened."),
                 indicator: "green"
@@ -347,21 +389,16 @@ class MementoTodos {
 
 
     render_todos() {
-
         const timeline = this.page.main.find("#todo-timeline");
 
         let filtered = this.todos.filter(todo => {
-
             if (todo.status === "Cancelled") {
                 return false;
             }
-
             if (this.filter === "All") {
                 return true;
             }
-
             return todo.status === this.filter;
-
         });
 
 
@@ -385,6 +422,60 @@ class MementoTodos {
         }
 
 
+        // const html = filtered.map(todo => {
+
+        //     const completed = todo.status === "Closed";
+
+        //     const description = frappe.utils.escape_html(
+        //         todo.description || ""
+        //     );
+
+        //     const created = todo.creation
+        //         ? frappe.datetime.str_to_user(todo.creation)
+        //         : "";
+
+
+        //     return `
+        //         <div class="todo-item ${completed ? "completed" : ""}">
+
+        //             <div class="todo-item-check">
+
+        //                 <input
+        //                     type="checkbox"
+        //                     class="todo-checkbox"
+        //                     data-name="${todo.name}"
+        //                     ${completed ? "checked" : ""}
+        //                 >
+
+        //             </div>
+
+        //             <div class="todo-item-content">
+
+        //                 <div class="todo-description">
+        //                     ${description}
+        //                 </div>
+
+        //                 <div class="todo-item-meta">
+
+        //                     <span>
+        //                         <i class="fa fa-clock-o"></i>
+        //                         ${frappe.utils.escape_html(created)}
+        //                     </span>
+
+        //                     <span class="todo-status-label">
+        //                         ${completed ? "Completed" : "Pending"}
+        //                     </span>
+
+        //                 </div>
+
+        //             </div>
+
+        //         </div>
+        //     `;
+
+        // }).join("");
+
+
         const html = filtered.map(todo => {
 
             const completed = todo.status === "Closed";
@@ -397,16 +488,16 @@ class MementoTodos {
                 ? frappe.datetime.str_to_user(todo.creation)
                 : "";
 
-
             return `
-                <div class="todo-item ${completed ? "completed" : ""}">
+                <div class="todo-item ${completed ? "completed" : ""}"
+                    data-name="${frappe.utils.escape_html(todo.name)}">
 
                     <div class="todo-item-check">
 
                         <input
                             type="checkbox"
                             class="todo-checkbox"
-                            data-name="${todo.name}"
+                            data-name="${frappe.utils.escape_html(todo.name)}"
                             ${completed ? "checked" : ""}
                         >
 
@@ -414,20 +505,40 @@ class MementoTodos {
 
                     <div class="todo-item-content">
 
-                        <div class="todo-description">
-                            ${description}
-                        </div>
+                        <div class="todo-description-view">
 
-                        <div class="todo-item-meta">
+                            <div class="todo-description">
+                                ${description}
+                            </div>
 
-                            <span>
-                                <i class="fa fa-clock-o"></i>
-                                ${frappe.utils.escape_html(created)}
-                            </span>
+                            <div class="todo-item-meta">
 
-                            <span class="todo-status-label">
-                                ${completed ? "Completed" : "Pending"}
-                            </span>
+                                <span>
+                                    <i class="fa fa-clock-o"></i>
+                                    ${frappe.utils.escape_html(created)}
+                                </span>
+
+                                <span class="todo-status-label">
+                                    ${completed ? "Completed" : "Pending"}
+                                </span>
+
+                            </div>
+
+                            <div class="todo-item-actions">
+
+                                <button class="todo-edit-btn"
+                                    data-name="${frappe.utils.escape_html(todo.name)}">
+                                    <i class="fa fa-pencil"></i>
+                                    Edit
+                                </button>
+
+                                <button class="todo-delete-btn"
+                                    data-name="${frappe.utils.escape_html(todo.name)}">
+                                    <i class="fa fa-trash-o"></i>
+                                    Delete
+                                </button>
+
+                            </div>
 
                         </div>
 
@@ -437,9 +548,8 @@ class MementoTodos {
             `;
 
         }).join("");
-
-
         timeline.html(html);
+
 
         this.scroll_to_bottom();
 
@@ -521,7 +631,242 @@ class MementoTodos {
 
     // }   
 
+    start_edit(name) {
 
+        console.log("Starting edit for task:", name);
+
+        const todo = this.todos.find(item => item.name === name);
+
+        console.log("Found todo:", todo);
+
+        if (!todo) return;
+
+        const card = this.page.main.find(
+            `.todo-item[data-name="${CSS.escape(name)}"]`
+        );
+
+        const view = card.find(".todo-description-view");
+
+        if (!view.length || card.find(".todo-inline-editor").length) {
+            return;
+        }
+
+        const editor = $(`
+            <div class="todo-inline-editor">
+
+                <div class="todo-editor-actions">
+
+                    <button class="todo-save-btn">
+                        Save
+                    </button>
+
+                    <button class="todo-dismiss-btn">
+                        Dismiss
+                    </button>
+
+                </div>
+
+                <textarea
+                    class="todo-edit-textarea"
+                    rows="3">
+                </textarea>
+
+            </div>
+        `);
+
+        editor.find(".todo-edit-textarea")
+            .val(todo.description || "");
+
+        view.replaceWith(editor);
+
+        const textarea = editor.find("textarea");
+
+        textarea.trigger("focus");
+
+        // Place cursor at the end.
+        textarea[0].setSelectionRange(
+            textarea.val().length,
+            textarea.val().length
+        );
+
+    }
+
+
+    async save_edit(name) {
+
+        console.log("Saving edit for task:", name);
+
+        const card = this.page.main.find(
+            `.todo-item[data-name="${CSS.escape(name)}"]`
+        );
+
+        const editor = card.find(".todo-inline-editor");
+
+        const textarea = editor.find("textarea");
+
+        console.log("Textarea value:", textarea.val());
+
+        const description = textarea.val().trim();
+
+        if (!description) {
+
+            frappe.show_alert({
+                message: __("Task cannot be empty."),
+                indicator: "orange"
+            });
+
+            textarea.trigger("focus");
+
+            return;
+        }
+
+        const saveButton = editor.find(".todo-save-btn");
+
+        saveButton.prop("disabled", true).text(__("Saving..."));
+
+        try {
+
+            const response = await frappe.call({
+
+                method: "memento.memento.page.todo_3.todo_3.update_todo_description",
+
+                args: {
+                    name: name,
+                    description: description
+                }
+
+            });
+
+            const updated = response.message;
+
+            // Update local data.
+            const todo = this.todos.find(
+                item => item.name === name
+            );
+
+            if (todo) {
+                todo.description = updated.description;
+                todo.modified = updated.modified;
+            }
+
+            // Replace editor with normal view.
+            const completed = todo && todo.status === "Closed";
+
+            const view = $(`
+                <div class="todo-description-view">
+
+                    <div class="todo-description"></div>
+
+                    <div class="todo-item-meta">
+
+                        <span class="todo-status-label">
+                            ${completed ? "Completed" : "Pending"}
+                        </span>
+
+                    </div>
+
+                    <div class="todo-item-actions">
+
+                        <button class="todo-edit-btn"
+                            data-name="${frappe.utils.escape_html(name)}">
+                            <i class="fa fa-pencil"></i>
+                            Edit
+                        </button>
+
+                        <button class="todo-delete-btn"
+                            data-name="${frappe.utils.escape_html(name)}">
+                            <i class="fa fa-trash-o"></i>
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+            `);
+
+            view.find(".todo-description")
+                .text(updated.description);
+
+            editor.replaceWith(view);
+
+            frappe.show_alert({
+                message: __("Task updated successfully."),
+                indicator: "green"
+            });
+
+        } catch (error) {
+
+            saveButton.prop("disabled", false).text(__("Save"));
+
+            // Keep editor open if saving fails.
+
+        }
+
+    }
+
+
+    dismiss_edit(name) {
+
+        const todo = this.todos.find(
+            item => item.name === name
+        );
+
+        if (!todo) return;
+
+        // Restore the original card without saving.
+        this.render_todos();
+
+    }
+
+
+    async delete_todo(name) {
+
+        frappe.confirm(
+            __("Are you sure you want to delete this task?"),
+
+            async () => {
+
+                try {
+
+                    await frappe.call({
+
+                        method: "memento.memento.page.todo_3.todo_3.delete_my_todo",
+
+                        args: {
+                            name: name
+                        }
+
+                    });
+
+                    // Remove from local array.
+                    this.todos = this.todos.filter(
+                        todo => todo.name !== name
+                    );
+
+                    // Remove only this card.
+                    this.page.main.find(
+                        `.todo-item[data-name="${CSS.escape(name)}"]`
+                    ).fadeOut(180, function () {
+                        $(this).remove();
+                    });
+
+                    this.update_stats();
+
+                    frappe.show_alert({
+                        message: __("Task deleted successfully."),
+                        indicator: "green"
+                    });
+
+                } catch (error) {
+
+                    // Frappe displays the server-side error.
+
+                }
+
+            }
+        );
+
+    }
 
     scroll_to_bottom() {
 

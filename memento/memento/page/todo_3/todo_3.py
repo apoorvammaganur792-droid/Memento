@@ -82,3 +82,81 @@ def update_todo_status(name, status):
         "status": todo.status,
         "message": _("Task updated successfully.")
     }
+
+
+
+
+
+@frappe.whitelist()
+def update_todo_description(name, description):
+
+
+    # frappe.msgprint(f"Updating description for task: {name} to: {description}")
+    """Update an existing personal task."""
+
+
+
+    user = frappe.session.user
+
+    if user == "Guest":
+        frappe.throw(_("Please log in first."))
+
+    description = (description or "").strip()
+
+
+
+    if not description:
+        frappe.throw(_("Task description cannot be empty."))
+
+    if len(description) > 5000:
+        frappe.throw(_("Task description cannot exceed 5000 characters."))
+
+    todo = frappe.get_doc("Daily ToDo", name)
+
+    if todo.allocated_to != user:
+        frappe.throw(
+            _("You are not authorized to edit this task."),
+            frappe.PermissionError
+        )
+        return
+
+    # if todo.status == "Cancelled":
+    #     frappe.throw(_("Cancelled tasks cannot be edited."))
+
+    todo.description = description
+    todo.save(ignore_permissions=True)
+
+    return {
+        "name": todo.name,
+        "description": todo.description,
+        "modified": todo.modified,
+        "message": _("Task updated successfully.")
+    }
+
+
+@frappe.whitelist()
+def delete_my_todo(name):
+    """Delete an owned personal task."""
+
+    user = frappe.session.user
+
+    if user == "Guest":
+        frappe.throw(_("Please log in first."))
+
+    todo = frappe.get_doc("ToDo", name)
+
+    if todo.allocated_to != user:
+        frappe.throw(
+            _("You are not authorized to delete this task."),
+            frappe.PermissionError
+        )
+
+    frappe.delete_doc(
+        "ToDo",
+        name,
+        ignore_permissions=True
+    )
+
+    return {
+        "message": _("Task deleted successfully.")
+    }
