@@ -132,6 +132,8 @@
     border: 1px solid var(--border-color);
     border-radius: 16px;
 
+    transform: none;
+
     transition:
         background 0.2s ease,
         border-color 0.2s ease,
@@ -139,7 +141,8 @@
         box-shadow 0.2s ease;
 }
 .todo-item:hover {
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
+    transform: none;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -271,8 +274,6 @@
 .todo-item.completed .todo-status-label {
     color: var(--text-muted);
 }
-
-
 /* Empty and loading states */
 
 .todo-empty,
@@ -311,11 +312,13 @@
 
 .todo-item:hover .todo-item-actions {
     /* opacity: 1; */
+    /* border-color: var(--text-muted); */
+    
     display: flex;
     animation: todo-actions-appear 0.25s ease 0.35s both;
-   
-    
 }
+
+
 
 @keyframes todo-actions-appear {
     from {
@@ -336,6 +339,22 @@
     font-size: 11px;
     padding: 3px 0;
     cursor: pointer;
+}
+
+.todo-item-actions .todo-delete-btn {
+    border: 1px solid var(--todo-border);
+    border-radius: 10px;
+    padding: 7px 7px;
+    margin: 0;
+   
+}
+
+.todo-item-actions .todo-edit-btn {
+    border: 1px solid var(--todo-border);
+    border-radius: 10px;
+    padding: 7px 7px;
+    margin: 0;
+   
 }
 
 .todo-item-actions button:hover {
