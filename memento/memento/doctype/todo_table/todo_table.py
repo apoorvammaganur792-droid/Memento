@@ -4,8 +4,6 @@
 from frappe.model.document import Document
 from frappe.utils import now_datetime, get_datetime
 
-
-
 class ToDoTable(Document):
 
     def before_insert(self):
@@ -13,18 +11,26 @@ class ToDoTable(Document):
             self.task_start_time = now_datetime()
 
     def validate(self):
-        if self.task_start_time and self.task_end_time:
 
-            start_on = get_datetime(self.task_start_time)
-            end_on = get_datetime(self.task_end_time)
+        for row in self.task_todo:
 
-            duration = int((end_on - start_on).total_seconds())
+            if row.status == 1:
 
-            hours, remainder = divmod(duration, 3600)
-            minutes, seconds = divmod(remainder, 60)
+                if not row.end_on:
+                    row.end_on = now_datetime()
 
-            self.total_duration = (
-                f"{hours} hours {minutes} minutes {seconds} seconds"
-            )
-        else:
-            self.total_duration = ""
+                if row.start_on and row.end_on:
+
+                    start = get_datetime(row.start_on)
+                    end = get_datetime(row.end_on)
+
+                    duration = int((end - start).total_seconds())
+
+                    hours, remainder = divmod(duration, 3600)
+                    minutes, seconds = divmod(remainder, 60)
+
+                    row.total_duration = f"{hours}h {minutes}m {seconds}s"
+
+            else:
+                row.end_on = None
+                row.total_duration = ""

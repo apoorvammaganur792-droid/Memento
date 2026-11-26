@@ -13,21 +13,31 @@ class Tasks(Document):
             self.task_start_time = now_datetime()
 
     def validate(self):
+
         for row in self.task_todo:
 
-            if row.start_on and row.end_on:
+            if row.status == 1:
 
-                start = get_datetime(row.start_on)
-                end = get_datetime(row.end_on)
+                if not row.end_on:
+                    row.end_on = now_datetime()
 
-                seconds = int((end - start).total_seconds())
+                if row.start_on and row.end_on:
 
-                hours, remainder = divmod(seconds, 3600)
-                minutes, seconds = divmod(remainder, 60)
+                    start = get_datetime(row.start_on)
+                    end = get_datetime(row.end_on)
 
-                row.total_duration = f"{hours}h {minutes}m {seconds}s"
+                    total_seconds = int((end - start).total_seconds())
+
+                    days, remainder = divmod(total_seconds, 86400)
+                    hours, remainder = divmod(remainder, 3600)
+                    minutes, seconds = divmod(remainder, 60)
+
+                    row.total_duration = (
+                        f"{days}d {hours}h {minutes}m {seconds}s"
+                    )
 
             else:
+                row.end_on = None
                 row.total_duration = ""
 
     def on_update(self):
